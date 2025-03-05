@@ -2,10 +2,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mainactivity</groupId>
+<<<<<<< HEAD
     <artifactId>Cabservice</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Cabservice-1.0-SNAPSHOT</name>
+=======
+    <artifactId>mavenproject6</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>mavenproject6-1.0-SNAPSHOT</name>
+>>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77
     
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -17,12 +24,53 @@
     </properties>
     
     <dependencies>
+<<<<<<< HEAD
+=======
+         <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+>>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
             <version>${jakartaee}</version>
             <scope>provided</scope>
         </dependency>
+<<<<<<< HEAD
+=======
+         <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>8.0.33</version>
+         </dependency>
+
+                <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+        <groupId>jakarta.platform</groupId>
+        <artifactId>jakarta.jakartaee-api</artifactId>
+        <version>8.0.0</version> <!-- Change this to 8.0.0 or a compatible version -->
+        <scope>provided</scope>
+    </dependency>
+>>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77
     </dependencies>
     
      <build>

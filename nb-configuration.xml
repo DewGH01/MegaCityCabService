@@ -15,7 +15,12 @@ Any value defined here will override the pom.xml file value but is only applicab
 -->
         <org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_j2eeVersion>8.0-web</org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_j2eeVersion>
         <org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>ide</org-netbeans-modules-maven-jaxws.rest_2e_config_2e_type>
+<<<<<<< HEAD
         <netbeans.hint.jdkPlatform>Zulu_8.0.442_6</netbeans.hint.jdkPlatform>
         <org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_deploy_2e_server>gfv4ee7</org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_deploy_2e_server>
+=======
+        <org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_deploy_2e_server>gfv4ee7</org-netbeans-modules-maven-j2ee.netbeans_2e_hint_2e_deploy_2e_server>
+        <netbeans.hint.jdkPlatform>Zulu_8.0.442_6</netbeans.hint.jdkPlatform>
+>>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77
     </properties>
 </project-shared-configuration>

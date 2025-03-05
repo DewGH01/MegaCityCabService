@@ -1,2 +1,14 @@
+<<<<<<< HEAD
 D:\java\ovrs\Cabservice\src\main\java\com\mainactivity\cabservice\JakartaRestConfiguration.java
 D:\java\ovrs\Cabservice\src\main\java\com\mainactivity\cabservice\resources\JakartaEE8Resource.java
+=======
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\DriverResource.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\JakartaEE8Resource.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\DBUtil.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\Driver.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\User.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\JakartaRestConfiguration.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\UserResource.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\Car.java
+D:\java\ovrs\mavenproject6\src\main\java\com\mainactivity\mavenproject6\resources\CarResource.java
+>>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77

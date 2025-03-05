@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-=======
 <!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
->>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77
 <!--
     Copyright (c) 1997, 2018 Oracle and/or its affiliates. All rights reserved.
     
@@ -18,10 +15,6 @@
 
     SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
 -->
-<<<<<<< HEAD
-<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
-=======
->>>>>>> b8398d65f1a860e4cc73cc660405c8b7fc53bb77
 <glassfish-web-app error-url="">
   <class-loader delegate="true"/>
   <jsp-config>
