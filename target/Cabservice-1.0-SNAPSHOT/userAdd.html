@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+            font-size: 14px;
+        }
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .toggle-form a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Login</h2>
+    <div id="login-form">
+        <form id="loginForm" onsubmit="loginUser(event)">
+             
+        </form>
+        <div id="loginMessage" class="error"></div>
+    </div>
+
+    <div class="toggle-form">
+        <p>Don't have an account? <a href="javascript:void(0)" onclick="showRegisterForm()">Register here</a></p>
+    </div>
+
+    <h2>Register User</h2>
+    <div id="register-form" style="display: none;">
+        <form id="registerForm" onsubmit="registerUser(event)">
+            <input type="text" id="name" placeholder="Name" required />
+            <input type="text" id="address" placeholder="Address" required />
+            <input type="text" id="nic" placeholder="NIC" required />
+            <input type="email" id="email" placeholder="Email" required />
+            <input type="password" id="password" placeholder="Password" required />
+            <input type="submit" value="Register" />
+        </form>
+        <div id="registerMessage" class="error"></div>
+    </div>
+
+     
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:8080/mavenproject6/resources/users';
+
+    // Show Register Form
+    function showRegisterForm() {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('register-form').style.display = 'block';
+    }
+
+     
+
+    // Register User
+    async function registerUser(event) {
+        event.preventDefault();
+
+        const user = {
+            name: document.getElementById('name').value,
+            address: document.getElementById('address').value,
+            nic: document.getElementById('nic').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            role: 'customer', // Default role, can be adjusted as needed
+        };
+
+        try {
+            const response = await fetch(apiUrl + '/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+            
+            if (response.ok) {
+                document.getElementById('registerMessage').textContent = "Registration successful!";
+                document.getElementById('registerMessage').classList.remove('error');
+                document.getElementById('registerMessage').classList.add('success');
+            } else {
+                const error = await response.json();
+                document.getElementById('registerMessage').textContent = "Error: " + error.message;
+                document.getElementById('registerMessage').classList.add('error');
+            }
+        } catch (error) {
+            document.getElementById('registerMessage').textContent = "Error: " + error.message;
+            document.getElementById('registerMessage').classList.add('error');
+        }
+    }
+
+     
+</script>
+
+</body>
+</html>

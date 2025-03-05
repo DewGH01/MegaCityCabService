@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2a4d7f;
+            text-align: center;
+            font-size: 36px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(even) td {
+            background-color: #f1f1f1;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            margin: 4px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .form-container, .update-form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px auto;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container input, .update-form input, .update-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .update-form input:disabled {
+            background-color: #f1f1f1;
+        }
+        .update-form {
+            display: none;
+        }
+        .form-container button {
+            background-color: #008CBA;
+        }
+        .form-container button:hover {
+            background-color: #007B9F;
+        }
+        .cancel-btn {
+            background-color: #f44336;
+        }
+        .cancel-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Driver Management</h1>
+
+    <!-- Driver List Table -->
+    <table id="driverTable">
+        <thead>
+            <tr>
+                <th>Driver Name</th>
+                <th>Phone</th>
+                <th>Availability</th>
+                <th>Driver License</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Driver rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <!-- Add/Edit Driver Form -->
+    <div class="form-container">
+        <h3 id="formTitle">Add Driver</h3>
+        <form id="driverForm" onsubmit="saveDriver(event)">
+            <input type="text" id="driverName" placeholder="Driver Name" required />
+            <input type="text" id="driverPhone" placeholder="Phone" required />
+            <input type="text" id="driverLicense" placeholder="Driver License" required />
+            <label for="isAvailable">Available:</label>
+            <input type="checkbox" id="isAvailable" />
+            <input type="hidden" id="driverId" />
+            <input type="submit" value="Save Driver" />
+        </form>
+        <div id="errorMessage" class="error"></div>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:8080/mavenproject6/resources/drivers';
+        const driverTable = document.getElementById('driverTable').getElementsByTagName('tbody')[0];
+
+        // Fetch and display all drivers
+        async function fetchDrivers() {
+            try {
+                const response = await fetch(apiUrl);
+                const drivers = await response.json();
+
+                // Clear the table before populating
+                driverTable.innerHTML = '';
+
+                // Add drivers to the table
+                drivers.forEach(driver => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${driver.driverName}</td>
+                        <td>${driver.driverPhone}</td>
+                        <td>${driver.availability ? 'Yes' : 'No'}</td>
+                        <td>${driver.driverLicense}</td>
+                        <td>
+                            <button onclick="editDriver(${driver.driverId})">Edit</button>
+                            <button onclick="deleteDriver(${driver.driverId})">Delete</button>
+                        </td>
+                    `;
+                    row.setAttribute('data-id', driver.driverId);
+                    driverTable.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching drivers:', error);
+            }
+        }
+
+        // Add or Edit a driver
+        async function saveDriver(event) {
+            event.preventDefault();
+
+            const driver = {
+                driverId: document.getElementById('driverId').value || null,
+                driverName: document.getElementById('driverName').value,
+                driverPhone: document.getElementById('driverPhone').value,
+                driverLicense: document.getElementById('driverLicense').value,
+                availability: document.getElementById('isAvailable').checked
+            };
+
+            const method = driver.driverId ? 'PUT' : 'POST';
+            const url = driver.driverId ? `${apiUrl}/${driver.driverId}` : apiUrl;
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(driver)
+                });
+
+                if (response.ok) {
+                    fetchDrivers(); // Reload the drivers after save
+                    clearForm();
+                } else {
+                    const error = await response.json();
+                    document.getElementById('errorMessage').textContent = `Error: ${error.message}`;
+                }
+            } catch (error) {
+                console.error('Error saving driver:', error);
+            }
+        }
+
+        // Edit a driver
+        function editDriver(driverId) {
+            const row = document.querySelector(`#driverTable tr[data-id="${driverId}"]`);
+            document.getElementById('driverName').value = row.querySelector('td:nth-child(1)').textContent;
+            document.getElementById('driverPhone').value = row.querySelector('td:nth-child(2)').textContent;
+            document.getElementById('driverLicense').value = row.querySelector('td:nth-child(4)').textContent;
+            document.getElementById('isAvailable').checked = row.querySelector('td:nth-child(3)').textContent === 'Yes';
+            document.getElementById('driverId').value = driverId;
+            document.getElementById('formTitle').textContent = 'Edit Driver';
+        }
+
+        // Delete a driver
+        async function deleteDriver(driverId) {
+            try {
+                const response = await fetch(`${apiUrl}/${driverId}`, { method: 'DELETE' });
+
+                if (response.ok) {
+                    fetchDrivers(); // Reload the drivers after delete
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (error) {
+                console.error('Error deleting driver:', error);
+            }
+        }
+
+        // Clear the form
+        function clearForm() {
+            document.getElementById('driverName').value = '';
+            document.getElementById('driverPhone').value = '';
+            document.getElementById('driverLicense').value = '';
+            document.getElementById('isAvailable').checked = false;
+            document.getElementById('driverId').value = '';
+            document.getElementById('formTitle').textContent = 'Add Driver';
+        }
+
+        // Initialize the driver list on page load
+        window.onload = fetchDrivers;
+    </script>
+
+</body>
+</html>

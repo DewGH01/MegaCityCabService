@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Availability</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        table th, table td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Car Availability</h2>
+    <table class="table table-bordered mt-4" id="carsTable">
+        <thead>
+            <tr>
+                <th>Car Model</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Car data will be populated here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Fetch cars data from the API
+        $.get('http://localhost:8080/mavenproject6/resources/cars', function (data) {
+            let tableRows = '';
+            data.forEach(car => {
+                const availabilityStatus = car.isAvailable ? 'Available' : 'Not Available';
+                tableRows += `
+                    <tr>
+                        <td>${car.model} (${car.make}, ${car.year})</td>
+                        <td>${availabilityStatus}</td>
+                    </tr>
+                `;
+            });
+            $('#carsTable tbody').html(tableRows);
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Availability</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        table th, table td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Driver Availability</h2>
+    <table class="table table-bordered mt-4" id="driversTable">
+        <thead>
+            <tr>
+                <th>Driver Name</th>
+                <th>Phone</th>
+                <th>License</th>
+                <th>Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Driver data will be populated here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Fetch drivers data from the API
+        $.get('http://localhost:8080/mavenproject6/resources/drivers', function (data) {
+            let tableRows = '';
+            data.forEach(driver => {
+                const availabilityStatus = driver.availability ? 'Available' : 'Not Available';
+                tableRows += `
+                    <tr>
+                        <td>${driver.driverName}</td>
+                        <td>${driver.driverPhone}</td>
+                        <td>${driver.driverLicense}</td>
+                        <td>${availabilityStatus}</td>
+                    </tr>
+                `;
+            });
+            $('#driversTable tbody').html(tableRows);
+        });
+    });
+</script>
+
+</body>
+</html>

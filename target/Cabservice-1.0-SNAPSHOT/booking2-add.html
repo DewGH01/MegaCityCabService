@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Booking</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+     
+  <button onclick="window.location.href='carAvailability.html';">View Car Availability Page</button>
+   
+  <button onclick="window.location.href='driverAvailability.html';">View Driver Availability Page</button>
+  
+<div class="container">
+    <h2 class="text-center">Add New Booking</h2>
+    <form id="bookingForm">
+        <div class="form-group">
+            <label for="user-id">User ID</label>
+            <input type="text" id="user-id" class="form-control" value="1" readonly>
+        </div>
+        <div class="form-group">
+            <label for="customer-name">Customer Name</label>
+            <input type="text" id="customer-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="pickup-location">Pickup Location</label>
+            <select id="pickup-location" class="form-control" required>
+                <option value="" disabled selected>Select Pickup Location</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="drop-location">Drop Location</label>
+            <select id="drop-location" class="form-control" required>
+                <option value="" disabled selected>Select Drop Location</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="car">Car</label>
+            <select id="car" class="form-control" required>
+                <option value="" disabled selected>Select Car</option>
+                <!-- Car options will be added dynamically -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="price-per-km">Price per Km</label>
+            <input type="text" id="price-per-km" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="total-price">Total Price</label>
+            <input type="text" id="total-price" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="add-btn">Add Booking</button>
+            <button type="reset" class="btn btn-secondary" id="clear-btn">Clear</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Fetching distances data
+        $.get('http://localhost:8080/mavenproject6/resources/distances', function (data) {
+            let pickupOptions = '';
+            let dropOptions = '';
+            data.forEach(item => {
+                pickupOptions += `<option value="${item.distanceId}" data-distance="${item.distanceKm}">${item.pickupLocation}</option>`;
+                dropOptions += `<option value="${item.distanceId}">${item.dropLocation}</option>`;
+            });
+            $('#pickup-location').html(`<option value="" disabled selected>Select Pickup Location</option>${pickupOptions}`);
+            $('#drop-location').html(`<option value="" disabled selected>Select Drop Location</option>${dropOptions}`);
+        });
+
+        // Fetching car options
+        $.get('http://localhost:8080/mavenproject6/resources/cars', function (data) {
+            let carOptions = '';
+            data.forEach(item => {
+                carOptions += `<option value="${item.carId}" data-price="${item.pricePerKm}">${item.model} (${item.make})</option>`;
+            });
+            $('#car').html(`<option value="" disabled selected>Select Car</option>${carOptions}`);
+        });
+
+        // When car or locations are selected, calculate price per km and total price
+        $('#pickup-location, #drop-location, #car').change(function () {
+            const carId = $('#car').val();
+            const pickupId = $('#pickup-location').val();
+            const dropId = $('#drop-location').val();
+
+            if (carId && pickupId && dropId) {
+                const carPrice = $('#car option:selected').data('price');
+                const distanceKm = $('#pickup-location option:selected').data('distance');
+                const totalPrice = carPrice * distanceKm;
+
+                $('#price-per-km').val(carPrice);
+                $('#total-price').val(totalPrice.toFixed(2));
+            }
+        });
+
+        // Add booking button functionality
+        $('#add-btn').click(function () {
+            const userId = $('#user-id').val(); // User ID will be dynamically set (e.g., from session or login)
+            const customerName = $('#customer-name').val();
+            const email = $('#email').val();
+            const pickupLocation = $('#pickup-location option:selected').text();
+            const dropLocation = $('#drop-location option:selected').text();
+            const driverId = 1; // Driver ID can be selected dynamically
+            const carId = $('#car').val();
+            const pricePerKm = $('#price-per-km').val();
+            const distanceId = $('#pickup-location').val();
+
+            const bookingData = {
+                userId,
+                customerName,
+                email,
+                pickupLocation,
+                dropLocation,
+                driverId,
+                carId,
+                pricePerKm,
+                distanceId
+            };
+
+            $.ajax({
+                url: 'http://localhost:8080/mavenproject6/resources/bookings',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(bookingData),
+                success: function (response) {
+                    alert('Booking added successfully!');
+                    $('#bookingForm')[0].reset();
+                },
+                error: function () {
+                    alert('Error adding booking!');
+                }
+            });
+        });
+
+        // Clear button functionality
+        $('#clear-btn').click(function () {
+            $('#bookingForm')[0].reset();
+        });
+    });
+</script>
+
+</body>
+</html>

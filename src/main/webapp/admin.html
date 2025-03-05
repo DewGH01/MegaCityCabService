@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .navbar {
+            margin-bottom: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar:hover {
+            background-color: #444;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .card {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            background-color: #3e3e3e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            position: relative; /* Change fixed to relative */
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #007bff;
+        }
+
+        .card-body {
+            transition: background-color 0.3s ease;
+        }
+
+        .card-body:hover {
+            background-color: #f7f7f7;
+        }
+
+        .btn-primary {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Animation on page load */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .animated {
+            animation: fadeIn 1s ease-in;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body class="animated">
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="booking-management.html">Booking Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="bookingUpdate.html">Booking Update</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="car-management.html">Car Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="driver-management.html">Driver Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="distance-management.html">Distance Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="user-management.html">User Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="deleteContact.html">Delete Contact Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="Home.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="userlogin-register.html">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <h2>Welcome, Admin!</h2>
+    <p>As an admin, you have full access to manage bookings, cars, drivers, and users. Use the options in the navigation bar to manage and update bookings.</p>
+    
+    <!-- Admin Management Content -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Booking Management</h5>
+            <p class="card-text">You can manage your bookings effectively and efficiently here. Click the links in the navbar to get started.</p>
+            <a href="booking-management.html" class="btn btn-primary">Manage Bookings</a>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Car Management</h5>
+            <p class="card-text">Manage cars and availability in this section.</p>
+            <a href="car-management.html" class="btn btn-primary">Manage Cars</a>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Driver Management</h5>
+            <p class="card-text">You can manage drivers and their availability here.</p>
+            <a href="driver-management.html" class="btn btn-primary">Manage Drivers</a>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Distance Management</h5>
+            <p class="card-text">You can manage distances and their distance_per here.</p>
+            <a href="distance-management.html" class="btn btn-primary">Manage Distances</a>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">User Management</h5>
+            <p class="card-text">You can manage users and their details here.</p>
+            <a href="user-management.html" class="btn btn-primary">Manage Users</a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© Admin Dashboard 2025</p>
+    <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+</footer>
+
+<!-- JS Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Booking</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        table th, table td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center">Update Booking</h2>
+
+    <!-- Form to update booking details -->
+    <form id="updateBookingForm">
+        <div class="form-group">
+            <label for="booking-id">Booking ID</label>
+            <input type="text" id="booking-id" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="user-id">User ID</label>
+            <input type="text" id="user-id" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="customer-name">Customer Name</label>
+            <input type="text" id="customer-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="pickup-location">Pickup Location</label>
+            <select id="pickup-location" class="form-control" required>
+                <option value="" disabled selected>Select Pickup Location</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="drop-location">Drop Location</label>
+            <select id="drop-location" class="form-control" required>
+                <option value="" disabled selected>Select Drop Location</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="car">Car</label>
+            <select id="car" class="form-control" required>
+                <option value="" disabled selected>Select Car</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="price-per-km">Price per Km</label>
+            <input type="text" id="price-per-km" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="total-price">Total Price</label>
+            <input type="text" id="total-price" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" id="update-btn">Update Booking</button>
+            <button type="reset" class="btn btn-secondary" id="clear-btn">Clear</button>
+        </div>
+    </form>
+
+    <!-- Table to display all bookings -->
+    <h3 class="text-center mt-5">Bookings List</h3>
+    <table class="table table-bordered mt-4" id="bookingsTable">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Customer Name</th>
+                <th>Email</th>
+                <th>Pickup Location</th>
+                <th>Drop Location</th>
+                <th>Car</th>
+                <th>Price per Km</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Booking data will be populated here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Fetch and display all bookings
+        $.get('http://localhost:8080/mavenproject6/resources/bookings', function (data) {
+            let tableRows = '';
+            data.forEach(booking => {
+                tableRows += `
+                    <tr>
+                        <td>${booking.bookingId}</td>
+                        <td>${booking.customerName}</td>
+                        <td>${booking.email}</td>
+                        <td>${booking.pickupLocation}</td>
+                        <td>${booking.dropLocation}</td>
+                        <td>${booking.carId}</td>
+                        <td>${booking.pricePerKm}</td>
+                        <td>${(booking.pricePerKm * booking.distanceKm).toFixed(2)}</td>
+                        <td><button class="btn btn-warning btn-sm edit-btn" data-id="${booking.bookingId}">Edit</button></td>
+                    </tr>
+                `;
+            });
+            $('#bookingsTable tbody').html(tableRows);
+        });
+
+        // Fetch distances data
+        $.get('http://localhost:8080/mavenproject6/resources/distances', function (data) {
+            let pickupOptions = '';
+            let dropOptions = '';
+            data.forEach(item => {
+                pickupOptions += `<option value="${item.distanceId}" data-distance="${item.distanceKm}">${item.pickupLocation}</option>`;
+                dropOptions += `<option value="${item.distanceId}">${item.dropLocation}</option>`;
+            });
+            $('#pickup-location').html(`<option value="" disabled selected>Select Pickup Location</option>${pickupOptions}`);
+            $('#drop-location').html(`<option value="" disabled selected>Select Drop Location</option>${dropOptions}`);
+        });
+
+        // Fetch car options
+        $.get('http://localhost:8080/mavenproject6/resources/cars', function (data) {
+            let carOptions = '';
+            data.forEach(item => {
+                carOptions += `<option value="${item.carId}" data-price="${item.pricePerKm}">${item.model} (${item.make})</option>`;
+            });
+            $('#car').html(`<option value="" disabled selected>Select Car</option>${carOptions}`);
+        });
+
+        // When car or locations are selected, calculate price per km and total price
+        $('#pickup-location, #drop-location, #car').change(function () {
+            const carId = $('#car').val();
+            const pickupId = $('#pickup-location').val();
+            const dropId = $('#drop-location').val();
+
+            if (carId && pickupId && dropId) {
+                const carPrice = $('#car option:selected').data('price');
+                const distanceKm = $('#pickup-location option:selected').data('distance');
+                const totalPrice = carPrice * distanceKm;
+
+                $('#price-per-km').val(carPrice);
+                $('#total-price').val(totalPrice.toFixed(2));
+            }
+        });
+
+        // Handle edit button click for each booking
+        $(document).on('click', '.edit-btn', function () {
+            const bookingId = $(this).data('id');
+            // Fetch booking data by ID
+            $.get(`http://localhost:8080/mavenproject6/resources/bookings/${bookingId}`, function (data) {
+                $('#booking-id').val(data.bookingId);
+                $('#user-id').val(data.userId);
+                $('#customer-name').val(data.customerName);
+                $('#email').val(data.email);
+                $('#pickup-location').val(data.pickupLocation);
+                $('#drop-location').val(data.dropLocation);
+                $('#car').val(data.carId);
+                $('#price-per-km').val(data.pricePerKm);
+                $('#total-price').val((data.pricePerKm * data.distanceKm).toFixed(2));
+            });
+        });
+
+        // Update booking button functionality
+        $('#update-btn').click(function () {
+            const bookingId = $('#booking-id').val();
+            const userId = $('#user-id').val(); // User ID will be dynamically set (e.g., from session or login)
+            const customerName = $('#customer-name').val();
+            const email = $('#email').val();
+            const pickupLocation = $('#pickup-location option:selected').text();
+            const dropLocation = $('#drop-location option:selected').text();
+            const driverId = 1; // Driver ID can be selected dynamically
+            const carId = $('#car').val();
+            const pricePerKm = $('#price-per-km').val();
+            const distanceId = $('#pickup-location').val();
+
+            const updatedBookingData = {
+                userId,
+                customerName,
+                email,
+                pickupLocation,
+                dropLocation,
+                driverId,
+                carId,
+                pricePerKm,
+                distanceId
+            };
+
+            $.ajax({
+                url: `http://localhost:8080/mavenproject6/resources/bookings/${bookingId}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedBookingData),
+                success: function (response) {
+                    alert('Booking updated successfully!');
+                    $('#updateBookingForm')[0].reset();
+                    // Refresh bookings table after update
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error updating booking!');
+                }
+            });
+        });
+
+        // Clear button functionality
+        $('#clear-btn').click(function () {
+            $('#updateBookingForm')[0].reset();
+        });
+    });
+</script>
+
+</body>
+</html>
